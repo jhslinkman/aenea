@@ -434,7 +434,7 @@ def key_press(
                 {delay}
             end repeat
         on error
-            key up {{control, shift, option, command}}
+            key up [control, shift, option, command]
         end try
     end tell
     '''.format(key_command=key_command, count=count, delay=delay))
