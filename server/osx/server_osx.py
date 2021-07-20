@@ -298,19 +298,20 @@ def get_active_window():
     ''')
     # window_id isn't really a unique id, instead it's just the app name -- but
     # still useful for automating through applescript
-    window_id, window_title = script.run()
+    rv = script.run()
+    print(rv)
+    window_id, window_title = rv
     if window_id:
-        return window_id.encode('utf-8'), window_title.encode('utf-8')
+        return window_id, window_title
     else:
         return None, None
 
 
 def map_window_properties(properties):
     p = {}
-    for key in properties:
-        short_key = re.match(r".*\('(.*)'\).*", str(key))  # is there a better
-        # way to access keys that are instances?
-        p[str(short_key.group(1))] = properties[key]
+    for key in properties.keys():
+        short_key = str(key.code, 'utf-8')
+        p[short_key] = properties[key]
     return p
 
 
@@ -354,30 +355,22 @@ def get_context():
        at least include title and executable.'''
     window_id, window_title = get_active_window()
     properties = get_window_properties(window_id)
-    properties['id'] = window_id
-    properties['title'] = window_title
 
-    # Types in 'breaking' throw an exception in jsonrpclib, so
-    # they need to be converted to strings.
-    breaking = [objc.pyobjc_unicode,         # NSString
-                applescript.aecodecs.AEType] # AppleEvent
+    rv = {
+        'id': window_id,
+        'title': window_title,
+    }
 
-    for key in properties:
-        for c in breaking:
-            if isinstance(properties[key], c):
-                if hasattr(properties[key], 'encode') and \
-                   callable(getattr(properties[key], 'encode')):
-                    # pyobjc_unicode aren't accepted by 'str()', but need
-                    # to be converted or jsonrpclib balks.
-                    properties[key] = properties[key].encode('utf-8')
-                else:
-                    # AEType doesn't respond to 'encode()'
-                    properties[key] = str(properties[key])
-                break
+    for key, val in properties.items():
+        if isinstance(val, applescript.aecodecs.AEType):
+            val = str(val.code, 'utf-8')
+        elif isinstance(val, objc.pyobjc_unicode):
+            val = str(val)
+        rv[key] = val
 
     logging.debug(properties)
 
-    return properties
+    return rv
 
 
 def key_press(
