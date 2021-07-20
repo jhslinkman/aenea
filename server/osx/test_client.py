@@ -55,7 +55,7 @@ def test_key_press(distobj):
     distobj.key_press(key='a')
     distobj.key_press(key='a', modifiers=['shift'])
     distobj.key_press(key='shift', direction='down')
-    distobj.key_press(key='b', count_delay=100, count=3)
+    distobj.key_press(key='b', count_delay=1, count=3)
     distobj.key_press(key='shift', direction='up')
 
 
