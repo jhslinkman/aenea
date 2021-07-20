@@ -38,7 +38,18 @@ class BatchProxy(object):
                 self._commands.append((key, a, kw))
         return call
 
+def log_test(func):
+    def inner(*args, **kwargs):
+        print(f'Running: {func.__name__}')
+        try:
+            func(*args, **kwargs)
+            print(f'Completed: {func.__name__}\n\n')
+        except Exception as e:
+            print(f'Failed: {func.__name__}\n\n')
+            print(e)
+    return inner
 
+@log_test
 def test_key_press(distobj):
     '''Should write aABBB, taking a second between B's.'''
     distobj.key_press(key='a')
@@ -48,11 +59,13 @@ def test_key_press(distobj):
     distobj.key_press(key='shift', direction='up')
 
 
+@log_test
 def test_write_text(distobj):
     '''Should write Hello world!'''
     distobj.write_text(text='Hello world!')
 
 
+@log_test
 def test_click_mouse(distobj):
     '''should double left click, then wheel up twice, then right click.'''
     distobj.click_mouse(button='left', count=2)
@@ -61,6 +74,7 @@ def test_click_mouse(distobj):
     distobj.click_mouse(button='left')
 
 
+@log_test
 def test_move_mouse(distobj):
     '''Should move mouse to absolute upper left, then middle of screen,
        then middle of active window, then click the upper left and
@@ -84,6 +98,7 @@ def test_move_mouse(distobj):
     distobj.pause(amount=100)
 
 
+@log_test
 def test_mouse_drag(distobj):
     '''Should left click upper left and drag to center.'''
     distobj.move_mouse(x=0, y=0, proportional=True)
@@ -92,6 +107,7 @@ def test_mouse_drag(distobj):
     distobj.click_mouse(button='left', direction='up')
 
 
+@log_test
 def test_pause(distobj):
     '''Should pause five seconds.'''
     distobj.pause(amount=500)
