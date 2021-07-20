@@ -1,6 +1,6 @@
 from yapsy.IPlugin import IPlugin
 import os
-import config
+from . import config
 from subprocess import Popen
 
 
@@ -14,7 +14,7 @@ class RecognitionBarPlugin(IPlugin):
                 Popen([ui_path])
                 
             except Exception as e:
-                print "Error writing starting the recognition bar UI: "+str(e)
+                print("Error writing starting the recognition bar UI: "+str(e))
         
         
     def register_rpcs(self, server):
@@ -22,7 +22,7 @@ class RecognitionBarPlugin(IPlugin):
             server.register_function(self.on_recognition)
             server.register_function(self.on_failure)
             server.register_function(self.on_begin)
-            print "Recognition results plugin initialized. NOTE: you need also require the _recognition_results_observer.py file in your MACRO folder for this plugin to work."
+            print("Recognition results plugin initialized. NOTE: you need also require the _recognition_results_observer.py file in your MACRO folder for this plugin to work.")
     
     def on_begin(self,):
         self.write_message(config.begin_literal)
@@ -37,4 +37,4 @@ class RecognitionBarPlugin(IPlugin):
             self.fd.flush()
             
         except Exception as e:
-            print "Error writing recognition result: "+str(e)
+            print("Error writing recognition result: "+str(e))

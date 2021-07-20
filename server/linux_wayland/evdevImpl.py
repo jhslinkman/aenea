@@ -126,7 +126,7 @@ class EvdevPlatformRpcs(AbstractAeneaPlatformRpcs):
 
 		key = special.get(key, key) #convert to usable str or to a key code
 
-		if isinstance(key, (str, unicode)): #need to convert to key codes
+		if isinstance(key, str): #need to convert to key codes
 			keys = fixed.get(key)
 			if keys is None: #not a fixed
 				keys = self.mapping.solo().get(key)

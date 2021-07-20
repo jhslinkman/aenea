@@ -140,8 +140,8 @@ def main():
     communication = Proxy(config.HOST, config.PORT, security_token)
     all_tests(communication)
     test_multiple_actions(communication)
-    print 'Get context returns:'
-    print communication.get_context()
+    print('Get context returns:')
+    print(communication.get_context())
 
 if __name__ == '__main__':
     main()

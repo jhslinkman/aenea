@@ -111,9 +111,9 @@ class Window(object):
 
 def test_get_context(rpc, window):
     context = rpc.get_context()
-    assert context[u'title'] == WINDOW_NAME
-    assert context[u'cls_name'] == CLS_NAME
-    assert context[u'cls'] == CLS
+    assert context['title'] == WINDOW_NAME
+    assert context['cls_name'] == CLS_NAME
+    assert context['cls'] == CLS
 
 
 def test_key_press(rpc, window):
@@ -157,7 +157,7 @@ def test_key_press(rpc, window):
 
     # Repeat
     rpc.key_press(key='x', count=5)
-    for i in xrange(5):
+    for i in range(5):
         assert window.keysym(window.wait_event(Xlib.X.KeyPress)) == 'x'
         assert window.keysym(window.wait_event(Xlib.X.KeyRelease)) == 'x'
 
@@ -179,12 +179,12 @@ def test_click_mouse(rpc, window):
     window.set_event_mask([Xlib.X.ButtonPress, Xlib.X.ButtonRelease])
 
     rpc.click_mouse(button='left', count=2)
-    for i in xrange(2):
+    for i in range(2):
         assert window.wait_event(Xlib.X.ButtonPress).detail == 1
         assert window.wait_event(Xlib.X.ButtonRelease).detail == 1
 
     rpc.click_mouse(button='wheelup', count=3)
-    for i in xrange(3):
+    for i in range(3):
         assert window.wait_event(Xlib.X.ButtonPress).detail == 4
         assert window.wait_event(Xlib.X.ButtonRelease).detail == 4
 
@@ -291,7 +291,7 @@ def test_multiple_actions(sync_rpc, window):
 
 
 def test(method, rpc, window):
-    print 'Testing', method.__name__
+    print('Testing', method.__name__)
     assert not window.flush()
     window.set_event_mask([])
     method(rpc, window)
@@ -305,16 +305,16 @@ if __name__ == '__main__':
 
     communication = Proxy(config.HOST, config.PORT)
 
-    print 'Start the server, maximize the test window on your primary monitor, '
-    print 'put the mouse in the center, select the window, and then hit space '
-    print 'to begin the automated test.'
-    print
+    print('Start the server, maximize the test window on your primary monitor, ')
+    print('put the mouse in the center, select the window, and then hit space ')
+    print('to begin the automated test.')
+    print()
     window.set_event_mask([Xlib.X.KeyPress, Xlib.X.KeyRelease])
     for event in window.events:
         if event.type == Xlib.X.KeyRelease and window.keysym(event) == ' ':
             break
 
-    print 'Beginning test.'
+    print('Beginning test.')
 
     test(test_get_context, communication.server, window)
     test(test_key_press, communication.server, window)
@@ -325,4 +325,4 @@ if __name__ == '__main__':
     test(test_pause, communication.server, window)
     test(test_multiple_actions, communication.server, window)
 
-    print 'All tests complete.'
+    print('All tests complete.')

@@ -21,7 +21,7 @@ import threading
 
 import util.communications
 
-import server_x11
+from . import server_x11
 
 HOST = '127.0.0.1'
 PORT = 58382

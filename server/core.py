@@ -167,15 +167,13 @@ class AeneaServer(object):
                 break
 
 
-class AbstractAeneaPlatformRpcs(object):
+class AbstractAeneaPlatformRpcs(object, metaclass=abc.ABCMeta):
     """
     Interface that defines Aenea's supported RPCs.  This is where the platform
     specific magic happens for each of Aenea's server distros. Concrete
     subclasses must provide implementations for server_info, get_context,
     and rpc_commands.
     """
-
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, logger=None):
         self.logger = logger or logging.getLogger(self.__class__.__name__)

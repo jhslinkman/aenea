@@ -259,7 +259,7 @@ _KEYCODE_TRANSLATION = {
 
 
 def write_command(message, arguments=' -f -', executable='???'):
-    print 'echo \'%s\' | %s %s' % (message, executable, arguments)
+    print('echo \'%s\' | %s %s' % (message, executable, arguments))
     with os.popen('%s %s' % (executable, arguments), 'w') as fd:
         fd.write(message)
 
@@ -344,7 +344,7 @@ def get_window_properties(window_id=None):
 
 def transform_relative_mouse_event(event):
     geo = get_geometry()
-    dx, dy = map(int, map(float, event.split()))
+    dx, dy = list(map(int, list(map(float, event.split()))))
     return [('mousemove', '%i %i' % (geo['x'] + dx, geo['y'] + dy))]
 
 
@@ -428,7 +428,7 @@ def key_press(
             command = 'key code "{0}"'.format(key_to_press)
 
     if modifiers:
-        elems = map(lambda s: "%s down" % s, modifiers)
+        elems = ["%s down" % s for s in modifiers]
         key_command = "%s using {%s} " % (command, ', '.join(elems))
     else:
         key_command = command
@@ -490,12 +490,12 @@ def trigger_mouseclick(button, direction, posx, posy, clickCount=1):
         theEvent = CGEventCreateScrollWheelEvent(
             None, kCGScrollEventUnitLine, 1, yScroll)
 
-        for _ in xrange(clickCount):
+        for _ in range(clickCount):
             CGEventPost(kCGHIDEventTap, theEvent)
     elif direction == 'click':
         theEvent = CGEventCreateMouseEvent(
             None, click_mapping[button][0], (posx, posy), kCGMouseButtonLeft)
-        for _ in xrange(clickCount):
+        for _ in range(clickCount):
             CGEventSetType(theEvent, click_mapping[button][0])
             CGEventSetIntegerValueField(
                 theEvent, kCGMouseEventClickState, clickCount)
@@ -596,10 +596,10 @@ def multiple_actions(actions):
 
 
 def setup_server(host, port):
-    print "started on host = %s port = %s " % (host, port)
+    print("started on host = %s port = %s " % (host, port))
     security_token = getattr(config, 'SECURITY_TOKEN', None)
     if security_token is None:
-        print "A security token is not in use. This allows any link you click in a web browser to execute arbitrary commands."
+        print("A security token is not in use. This allows any link you click in a web browser to execute arbitrary commands.")
     server = AeneaJSONRPCServer(security_token, (host, port))
 
     for command in list_rpc_commands():
@@ -622,7 +622,7 @@ if __name__ == '__main__':
             import pprint
             pprint.pprint(ctx)
         except ImportError:
-            print ctx
+            print(ctx)
     else:
         if '-d' in sys.argv or '--daemon' in sys.argv:
             if os.fork() == 0:

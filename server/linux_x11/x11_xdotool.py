@@ -138,12 +138,12 @@ def update_key_translation(translation):
         'insert',
         'escape'
     ]
-    caps_keys.extend('f%i' % i for i in xrange(1, 13))
+    caps_keys.extend('f%i' % i for i in range(1, 13))
     for key in caps_keys:
         translation[key] = key[0].upper() + key[1:]
-    for index in xrange(10):
+    for index in range(10):
         translation['np%i' % index] = 'KP_%i' % index
-    for c in range(ord('a'), ord('z')) + range(ord('0'), ord('9')):
+    for c in list(range(ord('a'), ord('z'))) + list(range(ord('0'), ord('9'))):
         translation[chr(c)] = chr(c)
         translation[chr(c).upper()] = chr(c).upper()
 update_key_translation(_KEY_TRANSLATION)
@@ -213,13 +213,13 @@ class XdotoolPlatformRpcs(AbstractAeneaPlatformRpcs):
         geo = dict([val.lower()
                     for val in line.split('=')]
                    for line in geometry)
-        geo = dict((key, int(value)) for (key, value) in geo.iteritems())
+        geo = dict((key, int(value)) for (key, value) in geo.items())
         relevant_keys = 'x', 'y', 'width', 'height', 'screen'
         return dict((key, geo[key]) for key in relevant_keys)
 
     def transform_relative_mouse_event(self, event):
         geo = self.get_geometry()
-        dx, dy = map(int, map(float, event.split()))
+        dx, dy = list(map(int, list(map(float, event.split()))))
         return [('mousemove', '%i %i' % (geo['x'] + dx, geo['y'] + dy))]
 
     def get_context(self, _xdotool=None):

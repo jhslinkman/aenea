@@ -10,11 +10,11 @@ The file config.py contains the configuration of the appearance and location of 
 
 """
 
-from Tkinter import Tk, Frame, StringVar, Label, Button
+from tkinter import Tk, Frame, StringVar, Label, Button
 import sys
 import time
-import Queue,threading
-import config
+import queue,threading
+from . import config
 import logging
 
 class Application(object):
@@ -52,7 +52,7 @@ class Application(object):
             self.quit.pack({"side": "right"})
         
     def setup_watcher_thread(self):
-        self.queue=Queue.Queue()
+        self.queue=queue.Queue()
         self.watcher_thread=WatcherThread(self.callback)
         self.watcher_thread.daemon = True
         self.watcher_thread.start()
